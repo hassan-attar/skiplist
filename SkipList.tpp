@@ -50,22 +50,22 @@ SkipList<T>::SkipList(SkipList<T> &&rhs) noexcept: SkipList(rhs.maxLevel){
     size = rhs.size;
     for(int i = 0; i < maxLevel; i++){
         heads[i] = rhs.heads[i];
+        rhs.heads[i] = nullptr;
     }
-    rhs.heads = nullptr;
-    rhs.clear();
+    rhs.size = 0;
 }
 
 template<typename T>
-SkipList<T> &SkipList<T>::operator=(SkipList<T> &&rhs) {
+SkipList<T> &SkipList<T>::operator=(SkipList<T> &&rhs) noexcept {
     clear();
     maxLevel = rhs.maxLevel;
     size = rhs.size;
     heads = new Node<T>*[maxLevel];
     for(int i = 0; i < maxLevel; i++){
         heads[i] = rhs.heads[i];
+        rhs.heads[i] = nullptr;
     }
-    rhs.heads = nullptr;
-    rhs.clear();
+    rhs.size = 0;
     return *this;
 }
 
@@ -73,6 +73,7 @@ template<typename T>
 SkipList<T> &SkipList<T>::operator=(const SkipList<T> &rhs) {
     if(this != &rhs){
         clear();
+        delete [] heads;
         maxLevel = rhs.maxLevel;
         heads = new Node<T>*[maxLevel];
         for(int i = 0; i < maxLevel; i++) heads[i] = nullptr;
@@ -84,10 +85,14 @@ SkipList<T> &SkipList<T>::operator=(const SkipList<T> &rhs) {
     }
     return *this;
 }
+
 template<typename T>
 SkipList<T>::~SkipList() {
     clear();
     delete randomCoinFlip;
+    if(heads){
+        delete [] heads;
+    }
 }
 
 template<typename T>
@@ -108,11 +113,10 @@ void SkipList<T>::clear() {
     if(prev){
         delete prev;
     }
-    // delete heads array
-    if(heads){
-        delete [] heads;
+    for(int i = 0; i < maxLevel; i++){
+        heads[i] = nullptr;
     }
-    heads = nullptr;
+    // delete heads array
     size = 0;
 }
 

@@ -40,7 +40,7 @@ public:
     SkipList(SkipList<T> &&rhs) noexcept ;
     ~SkipList();
     SkipList<T> &operator=(const SkipList<T> &rhs);
-    SkipList<T> &operator=(SkipList<T> &&rhs);
+    SkipList<T> &operator=(SkipList<T> &&rhs) noexcept;
     // Getters
     size_t getSize();
     size_t getMaxLevel();
