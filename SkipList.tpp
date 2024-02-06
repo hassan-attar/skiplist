@@ -75,6 +75,7 @@ SkipList<T> &SkipList<T>::operator=(const SkipList<T> &rhs) {
         clear();
         maxLevel = rhs.maxLevel;
         heads = new Node<T>*[maxLevel];
+        for(int i = 0; i < maxLevel; i++) heads[i] = nullptr;
         Node<T> *temp = rhs.heads[0];
         while(temp){
             insert(temp->data);
