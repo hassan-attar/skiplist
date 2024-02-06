@@ -58,6 +58,7 @@ SkipList<T>::SkipList(SkipList<T> &&rhs) noexcept: SkipList(rhs.maxLevel){
 template<typename T>
 SkipList<T> &SkipList<T>::operator=(SkipList<T> &&rhs) noexcept {
     clear();
+    delete [] heads;
     maxLevel = rhs.maxLevel;
     size = rhs.size;
     heads = new Node<T>*[maxLevel];
