@@ -15,7 +15,7 @@ const size_t SkipList<T>::DEFAULT_MAX_LEVEL = 25;
  */
 template<typename T>
 SkipList<T>::SkipList(const std::initializer_list<T> &list)
-:heads{new Node<T>*[maxLevel]}, randomCoinFlip{new RandomCoinFlip()}, size{0}{
+:heads{new Node<T>*[maxLevel]}, randomCoinFlip{new RandomCoinFlip()}, size{0}, maxLevel{DEFAULT_MAX_LEVEL}{
     for(int i = 0; i < maxLevel; i++) heads[i] = nullptr;
     for(const T &x: list)
         insert(x);
@@ -52,6 +52,7 @@ SkipList<T>::SkipList(SkipList<T> &&rhs) noexcept: SkipList(rhs.maxLevel){
         heads[i] = rhs.heads[i];
     }
     rhs.heads = nullptr;
+    rhs.clear();
 }
 
 template<typename T>
@@ -64,17 +65,23 @@ SkipList<T> &SkipList<T>::operator=(SkipList<T> &&rhs) {
         heads[i] = rhs.heads[i];
     }
     rhs.heads = nullptr;
+    rhs.clear();
+    return *this;
 }
+
 template<typename T>
 SkipList<T> &SkipList<T>::operator=(const SkipList<T> &rhs) {
     if(this != &rhs){
         clear();
+        maxLevel = rhs.maxLevel;
+        heads = new Node<T>*[maxLevel];
         Node<T> *temp = rhs.heads[0];
         while(temp){
             insert(temp->data);
             temp = temp->next[0];
         }
     }
+    return *this;
 }
 template<typename T>
 SkipList<T>::~SkipList() {
@@ -89,16 +96,18 @@ void SkipList<T>::clear() {
     if(heads && heads[0]){
         prev = heads[0];
         heads[0] = heads[0]->next[0];
+        // either heads && heads[0] exist, or the list is empty all together.
+        while(heads[0]){
+            delete prev;
+            prev = heads[0];
+            heads[0] = heads[0]->next[0];
+        }
     }
-    // either heads && heads[0] exist, or the list is empty all together.
-    while(heads[0]){
-        delete prev;
-        prev = heads[0];
-        heads[0] = heads[0]->next[0];
-    }
+    // delete the last node
     if(prev){
         delete prev;
     }
+    // delete heads array
     if(heads){
         delete [] heads;
     }
@@ -227,6 +236,7 @@ bool SkipList<T>::remove(const T &item) {
  */
 template<typename T>
 void SkipList<T>::displayHeadToTail() {
+    if(!heads || !heads[0]) return;
     Node<T>* temp = heads[0];
     while(temp){
         std::cout << temp->data << " ";
@@ -239,6 +249,7 @@ void SkipList<T>::displayHeadToTail() {
  */
 template<typename T>
 void SkipList<T>::displayLevelByLevel() {
+    if(!heads || !heads[0]) return;
     T *arr = new T[size];
     Node<T>* temp;
     int i;
