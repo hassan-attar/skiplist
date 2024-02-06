@@ -35,7 +35,8 @@ int main() {
         }
     }
     std::cout << "#### SkipList Created. ####"<< std::endl;
-    for(SkipList<int>::iterator it = s->begin(); it != s->end(); ++it){
+    SkipList<int>::iterator it;
+    for(it = s->begin(); it != s->end(); ++it){
         std::cout << *it << " -> ";
     }
     std::cout << std::endl;
@@ -43,6 +44,12 @@ int main() {
     for(int x : *s){
         std::cout << x << " -> ";
     }
+    std::cout << std::endl;
+    it = s->find(40);
+    std::cout << "40 is in the list: " << (it != s->end()) << std::endl;
+    it = s->find(120);
+    std::cout << "120 is in the list: " << (it != s->end()) << std::endl;
+
     return 0;
 }
 

@@ -12,15 +12,14 @@ class SkipList {
     // Instance data
     Node<T> **heads;
     RandomCoinFlip *randomCoinFlip;
-    int size;
-    int maxLevel;
+    size_t size;
+    size_t maxLevel;
 
     // Static data
-    static const int DEFAULT_MAX_LEVEL;
+    static const size_t DEFAULT_MAX_LEVEL;
     // Private methods
     Node<T> *findItem(const T &item, Node<T> **update = nullptr);
-    int randomLevel();
-
+    size_t randomLevel();
 public:
     class iterator : std::iterator<std::forward_iterator_tag, T, size_t,T*, T&>{
     private:
@@ -35,7 +34,7 @@ public:
     };
     // Constructors
     SkipList();
-    explicit SkipList(int maxLevel);
+    explicit SkipList(size_t maxLevel);
     SkipList(const std::initializer_list<T> &list);
     SkipList(const SkipList<T> &rhs);
     SkipList(SkipList<T> &&rhs) noexcept ;
@@ -43,16 +42,16 @@ public:
     SkipList<T> &operator=(const SkipList<T> &rhs);
     SkipList<T> &operator=(SkipList<T> &&rhs);
     // Getters
-    int getSize();
-    int getMaxLevel();
+    size_t getSize();
+    size_t getMaxLevel();
 
     // Methods
     void displayHeadToTail();
     void displayLevelByLevel();
     void insert(const T &item);
     void clear();
-    const Node<T> *find(const T &item);
-    T remove(const T &item);
+    SkipList<T>::iterator find(const T &item);
+    bool remove(const T &item);
 
     // iterators
     SkipList<T>::iterator begin();

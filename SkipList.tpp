@@ -8,7 +8,7 @@
 #include <iomanip>
 
 template<typename T>
-const int SkipList<T>::DEFAULT_MAX_LEVEL = 25;
+const size_t SkipList<T>::DEFAULT_MAX_LEVEL = 25;
 /**
  * Initializer list constructor
  * @param list std::initializer_list<T>
@@ -28,7 +28,7 @@ template<typename T>
 SkipList<T>::SkipList():SkipList(DEFAULT_MAX_LEVEL){}
 
 template<typename T>
-SkipList<T>::SkipList(int _maxLevel): heads{new Node<T>*[_maxLevel]}, randomCoinFlip{new RandomCoinFlip()}, size{0}, maxLevel{_maxLevel} {
+SkipList<T>::SkipList(size_t _maxLevel): heads{new Node<T>*[_maxLevel]}, randomCoinFlip{new RandomCoinFlip()}, size{0}, maxLevel{_maxLevel} {
     for(int i = 0; i < maxLevel; i++) heads[i] = nullptr;
 }
 
@@ -112,8 +112,8 @@ void SkipList<T>::clear() {
  * @return random level
  */
 template<typename T>
-int SkipList<T>::randomLevel() {
-    int level = 0;
+size_t SkipList<T>::randomLevel() {
+    size_t level = 0;
     while(level < maxLevel - 1){
         if(randomCoinFlip->flipCoin() == 0) break;
         level++;
@@ -186,25 +186,25 @@ void SkipList<T>::insert(const T &item) {
  * @return a pointer to the item, or nullptr if not found
  */
 template<typename T>
-const Node<T>* SkipList<T>::find(const T &item) {
+typename SkipList<T>::iterator SkipList<T>::find(const T &item) {
     Node<T> *cur = findItem(item);
     // cur now points to the item or the largest element smaller than the item.
-    if(cur && cur->data == item) return cur;
-    else return nullptr;
+    if(cur && cur->data == item) return SkipList<T>::iterator(cur);
+    else return end();
 }
 /**
  * Removes item from the SkipList, if doesn't exist, will throw runtime_error
  * @param item to be removed
- * @return data that was inside that item.
+ * @return true if success, false otherwise.
  */
 template<typename T>
-T SkipList<T>::remove(const T &item) {
+bool SkipList<T>::remove(const T &item) {
     Node<T> **update = new Node<T> *[maxLevel]; // array for updating links between node after insertion
     for (int i = 0; i < maxLevel; i++) update[i] = nullptr;
     Node<T> *cur = findItem(item, update);
     // cur now points to the item or the largest element smaller than the item.
     if (!cur || cur->data != item) {
-        throw std::runtime_error("Item doesn't exist!");
+        return false;
     }; // don't need to delete anything
     for (int currentLevel = 0; currentLevel <= cur->level; currentLevel++) {
         /*
@@ -216,11 +216,10 @@ T SkipList<T>::remove(const T &item) {
         update[currentLevel] ? update[currentLevel]->next[currentLevel] = cur->next[currentLevel]
                              : heads[currentLevel] = cur->next[currentLevel];
     }
-    size--;
-    T x = cur->data;
     delete cur;
     delete[] update;
-    return x;
+    size--;
+    return true;
 }
 
 /**
@@ -270,11 +269,11 @@ void SkipList<T>::displayLevelByLevel() {
 }
 
 template<typename T>
-int SkipList<T>::getSize() {
+size_t SkipList<T>::getSize() {
     return size;
 }
 template<typename T>
-int SkipList<T>::getMaxLevel() {
+size_t SkipList<T>::getMaxLevel() {
     return maxLevel;
 }
 
