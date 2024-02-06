@@ -281,6 +281,7 @@ void SkipList<T>::displayLevelByLevel() {
         }
         std::cout <<" -> * " << std::endl;
     }
+    delete [] arr;
 
 }
 
