@@ -74,3 +74,6 @@ int main() {
 }
 
 ```
+## SkipList Verbose:
+For a visual representation of the operations performed on a SkipList (recommended for educational purposes), Please visit [skiplist_verbose](https://github.com/hassan-attar/skiplist_verbose)
+
