@@ -127,7 +127,7 @@ void SkipList<T>::clear() {
  * @return random level
  */
 template<typename T>
-size_t SkipList<T>::randomLevel() {
+size_t SkipList<T>::randomLevel() const{
     size_t level = 0;
     while(level < maxLevel - 1){
         if(randomCoinFlip->flipCoin() == 0) break;
@@ -137,7 +137,7 @@ size_t SkipList<T>::randomLevel() {
 }
 
 template<typename T>
-Node<T> *SkipList<T>::findItem(const T &item, Node<T> **update) {
+Node<T> *SkipList<T>::findItem(const T &item, Node<T> **update) const{
     int currentLevel = maxLevel - 1; // start from top most level.
     Node<T> *cur, *prev{nullptr};
     while (currentLevel >= 0){
@@ -201,7 +201,7 @@ void SkipList<T>::insert(const T &item) {
  * @return a pointer to the item, or nullptr if not found
  */
 template<typename T>
-typename SkipList<T>::iterator SkipList<T>::find(const T &item) {
+typename SkipList<T>::iterator SkipList<T>::find(const T &item) const{
     Node<T> *cur = findItem(item);
     // cur now points to the item or the largest element smaller than the item.
     if(cur && cur->data == item) return SkipList<T>::iterator(cur);
@@ -241,7 +241,7 @@ bool SkipList<T>::remove(const T &item) {
  * Display elements in level 0
  */
 template<typename T>
-void SkipList<T>::displayHeadToTail() {
+void SkipList<T>::displayHeadToTail() const {
     if(!heads || !heads[0]) return;
     Node<T>* temp = heads[0];
     while(temp){
@@ -254,7 +254,7 @@ void SkipList<T>::displayHeadToTail() {
  * Display elements level by level
  */
 template<typename T>
-void SkipList<T>::displayLevelByLevel() {
+void SkipList<T>::displayLevelByLevel() const{
     if(!heads || !heads[0]) return;
     T *arr = new T[size];
     Node<T>* temp;
@@ -287,20 +287,20 @@ void SkipList<T>::displayLevelByLevel() {
 }
 
 template<typename T>
-size_t SkipList<T>::getSize() {
+size_t SkipList<T>::getSize() const{
     return size;
 }
 template<typename T>
-size_t SkipList<T>::getMaxLevel() {
+size_t SkipList<T>::getMaxLevel() const{
     return maxLevel;
 }
 
 template<typename T>
-typename SkipList<T>::iterator SkipList<T>::begin() {
+typename SkipList<T>::iterator SkipList<T>::begin() const{
     return SkipList<T>::iterator(heads[0]);
 }
 template<typename T>
-typename SkipList<T>::iterator SkipList<T>::end() {
+typename SkipList<T>::iterator SkipList<T>::end() const{
     return SkipList<T>::iterator(nullptr);
 }
 
@@ -315,7 +315,7 @@ template<typename T>
 SkipList<T>::iterator::iterator(Node<T> *node): ptr{node} {}
 
 template<typename T>
-bool SkipList<T>::iterator::operator!=(const SkipList<T>::iterator &rhs) {
+bool SkipList<T>::iterator::operator!=(const SkipList<T>::iterator &rhs) const{
     return ptr != rhs.ptr;
 }
 template<typename T>
@@ -333,7 +333,7 @@ typename SkipList<T>::iterator SkipList<T>::iterator::operator++(int) {
 }
 
 template<typename T>
-T SkipList<T>::iterator::operator*() {
+const T& SkipList<T>::iterator::operator*() const{
     return ptr->data;
 }
 

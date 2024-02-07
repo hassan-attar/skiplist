@@ -9,17 +9,6 @@
 #include "RandomCoinFlip.h"
 template<typename T>
 class SkipList {
-    // Instance data
-    Node<T> **heads;
-    RandomCoinFlip *randomCoinFlip;
-    size_t size;
-    size_t maxLevel;
-
-    // Static data
-    static const size_t DEFAULT_MAX_LEVEL;
-    // Private methods
-    Node<T> *findItem(const T &item, Node<T> **update = nullptr);
-    size_t randomLevel();
 public:
     class iterator : std::iterator<std::forward_iterator_tag, T, size_t,T*, T&>{
     private:
@@ -29,8 +18,8 @@ public:
         iterator(Node<T> *node);
         iterator & operator++();
         iterator operator++(int);
-        bool operator!=(const SkipList<T>::iterator &rhs);
-        T operator*();
+        bool operator!=(const SkipList<T>::iterator &rhs) const;
+        const T &operator*() const;
     };
     // Constructors
     SkipList();
@@ -42,20 +31,32 @@ public:
     SkipList<T> &operator=(const SkipList<T> &rhs);
     SkipList<T> &operator=(SkipList<T> &&rhs) noexcept;
     // Getters
-    size_t getSize();
-    size_t getMaxLevel();
+    size_t getSize() const;
+    size_t getMaxLevel() const;
 
     // Methods
-    void displayHeadToTail();
-    void displayLevelByLevel();
+    void displayHeadToTail() const;
+    void displayLevelByLevel() const;
     void insert(const T &item);
     void clear();
-    SkipList<T>::iterator find(const T &item);
+    SkipList<T>::iterator find(const T &item) const;
     bool remove(const T &item);
 
     // iterators
-    SkipList<T>::iterator begin();
-    SkipList<T>::iterator end();
+    SkipList<T>::iterator begin() const;
+    SkipList<T>::iterator end() const;
+
+
+    static const size_t DEFAULT_MAX_LEVEL;
+protected:
+    // Instance data
+    Node<T> **heads;
+    RandomCoinFlip *randomCoinFlip;
+    size_t size;
+    size_t maxLevel;
+    // Helper methods
+    Node<T> *findItem(const T &item, Node<T> **update = nullptr) const;
+    size_t randomLevel() const;
 };
 
 #include "SkipList.tpp"
