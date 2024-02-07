@@ -27,7 +27,7 @@ public:
     SkipList(const std::initializer_list<T> &list);
     SkipList(const SkipList<T> &rhs);
     SkipList(SkipList<T> &&rhs) noexcept ;
-    ~SkipList();
+    virtual ~SkipList();
     SkipList<T> &operator=(const SkipList<T> &rhs);
     SkipList<T> &operator=(SkipList<T> &&rhs) noexcept;
     // Getters
