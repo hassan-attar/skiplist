@@ -58,10 +58,9 @@ int main() {
     }
     std::cout << std::endl;
     std::cout << "forRange\n";
-    for(const int &x : p){
-        std::cout << x << " ";
+    for(int x : *s){
+        std::cout << x << " -> ";
     }
-    std::cout << std::endl;
 
     std::cout << std::endl;
     it = s->find(40);
