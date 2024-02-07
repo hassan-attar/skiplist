@@ -172,7 +172,10 @@ void SkipList<T>::insert(const T &item) {
     for(int i = 0; i < maxLevel; i++) update[i] = nullptr;
 
     Node<T> *cur = findItem(item, update); // cur now points to the item or the smallest element larger than the item.
-    if(cur && cur->data == item) return; // don't add duplicates
+    if(cur && cur->data == item) {
+        delete [] update;
+        return;
+    }; // don't add duplicates
 
     int itemLevel = randomLevel(); // determine to which level the new node should be promoted
     Node<T> *newNode = new Node<T>(item, itemLevel);
@@ -219,6 +222,7 @@ bool SkipList<T>::remove(const T &item) {
     Node<T> *cur = findItem(item, update);
     // cur now points to the item or the largest element smaller than the item.
     if (!cur || cur->data != item) {
+        delete [] update;
         return false;
     }; // don't need to delete anything
     for (int currentLevel = 0; currentLevel <= cur->level; currentLevel++) {
