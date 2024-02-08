@@ -10,12 +10,17 @@
 template<typename T>
 class SkipList {
 public:
-    class iterator : std::iterator<std::forward_iterator_tag, T, size_t,T*, T&>{
+    class iterator{
     private:
         Node<T> *ptr;
     public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = T;
+        using difference_type = size_t;
+        using pointer = T*;
+        using reference = T&;
         iterator();
-        iterator(Node<T> *node);
+        explicit iterator(Node<T> *node);
         iterator & operator++();
         iterator operator++(int);
         bool operator!=(const SkipList<T>::iterator &rhs) const;
