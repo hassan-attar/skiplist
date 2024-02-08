@@ -9,13 +9,17 @@
 
 template<typename T>
 const size_t SkipList<T>::DEFAULT_MAX_LEVEL = 25;
+
+template<typename T>
+size_t SkipList<T>::defaultObjectMaxLevel = SkipList<T>::DEFAULT_MAX_LEVEL;
+
 /**
  * Initializer list constructor
  * @param list std::initializer_list<T>
  */
 template<typename T>
 SkipList<T>::SkipList(const std::initializer_list<T> &list)
-:heads{new Node<T>*[maxLevel]}, randomCoinFlip{new RandomCoinFlip()}, size{0}, maxLevel{DEFAULT_MAX_LEVEL}{
+:heads{new Node<T>*[maxLevel]}, randomCoinFlip{new RandomCoinFlip()}, size{0}, maxLevel{defaultObjectMaxLevel}{
     for(int i = 0; i < maxLevel; i++) heads[i] = nullptr;
     for(const T &x: list)
         insert(x);
@@ -25,7 +29,7 @@ SkipList<T>::SkipList(const std::initializer_list<T> &list)
  * Default Constructor
  */
 template<typename T>
-SkipList<T>::SkipList():SkipList(DEFAULT_MAX_LEVEL){}
+SkipList<T>::SkipList():SkipList(defaultObjectMaxLevel){}
 
 template<typename T>
 SkipList<T>::SkipList(size_t _maxLevel): heads{new Node<T>*[_maxLevel]}, randomCoinFlip{new RandomCoinFlip()}, size{0}, maxLevel{_maxLevel} {
@@ -289,7 +293,7 @@ void SkipList<T>::displayLevelByLevel() const{
     delete [] arr;
 
 }
-
+// GETTERS
 template<typename T>
 size_t SkipList<T>::getSize() const{
     return size;
@@ -298,6 +302,17 @@ template<typename T>
 size_t SkipList<T>::getMaxLevel() const{
     return maxLevel;
 }
+template<typename T>
+size_t SkipList<T>::getDefaultObjectMaxLevel() {
+    return defaultObjectMaxLevel;
+}
+template<typename T>
+void SkipList<T>::setDefaultObjectMaxLevel(size_t _maxLevel) {
+    if(_maxLevel > 0)
+        defaultObjectMaxLevel = _maxLevel;
+}
+
+// SETTERS
 
 template<typename T>
 typename SkipList<T>::iterator SkipList<T>::begin() const{

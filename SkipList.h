@@ -38,6 +38,8 @@ public:
     // Getters
     size_t getSize() const;
     size_t getMaxLevel() const;
+    static size_t getDefaultObjectMaxLevel();
+    static void setDefaultObjectMaxLevel(size_t maxLevel);
 
     // Methods
     void displayHeadToTail() const;
@@ -53,7 +55,9 @@ public:
 
 
     static const size_t DEFAULT_MAX_LEVEL;
+
 protected:
+    static size_t defaultObjectMaxLevel;
     // Instance data
     Node<T> **heads;
     RandomCoinFlip *randomCoinFlip;
