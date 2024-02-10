@@ -44,7 +44,7 @@ public:
     // Methods
     void displayHeadToTail() const;
     void displayLevelByLevel() const;
-    void insert(const T &item);
+    bool insert(const T &item);
     void clear();
     SkipList<T>::iterator find(const T &item) const;
     bool remove(const T &item);

@@ -169,16 +169,17 @@ Node<T> *SkipList<T>::findItem(const T &item, Node<T> **update) const{
 /**
  * inserts item into the SkipList, if it does not already exist.
  * @param item to be inserted
+ * @return if insert was successful, false if element already exist
  */
 template<typename T>
-void SkipList<T>::insert(const T &item) {
+bool SkipList<T>::insert(const T &item) {
     Node<T> **update = new Node<T> *[maxLevel]; // array for updating links between node after insertion
     for(int i = 0; i < maxLevel; i++) update[i] = nullptr;
 
     Node<T> *cur = findItem(item, update); // cur now points to the item or the smallest element larger than the item.
     if(cur && cur->data == item) {
         delete [] update;
-        return;
+        return false;
     }; // don't add duplicates
 
     int itemLevel = randomLevel(); // determine to which level the new node should be promoted
@@ -200,6 +201,7 @@ void SkipList<T>::insert(const T &item) {
     }
     size++;
     delete[] update;
+    return true;
 }
 
 /**
